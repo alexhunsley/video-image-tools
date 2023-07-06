@@ -14,12 +14,12 @@ In those situations, thumbnails generated from videos are a handy preview tool t
 
 Suppose you have a video from your drone and you use something like `ffmpeg` to generate some jpg thumbnail images, one per second. For a 5 minute video that's 300 images.
 
-If you visit the folder of images in Finder/Explorer, you can turn on Icon view and see previews of all images. It's a little awkward to get the whole gist of the video,
+If you visit the folder of images in Finder, you can turn on Icon view and see previews of all images. It's a little awkward to get the whole gist of the video,
 as you have to scroll around, but it's doable.
 
 Suppose now you have 20 drone videos (each 5 mins), and thumbnails made for each.
 
-To preview them all, you can use the Search bar of Finder/Explorer to find all .jpgs and view them as Icons. But now getting the gist of the videos' content is more annoying -- that's
+To preview them all, you can use the Search bar of Finder to find all .jpgs and view them as Icons. But now getting the gist of the videos' content is more annoying -- that's
 6000 images now to scroll through.
 
 Surely there's an easier way!
