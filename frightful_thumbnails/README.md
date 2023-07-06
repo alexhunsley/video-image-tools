@@ -52,17 +52,17 @@ Imagine you have thumbnail jpgs for a short video:
 After running Frightful Thumbnails, the files are renamed like this:
 
 ```
-    dunsapie_loch_00001__b0000.jpg.jpg
-    dunsapie_loch_00002__b.jpg.jpg
-    dunsapie_loch_00003__b0.jpg.jpg
-    dunsapie_loch_00004__b.jpg.jpg
-    dunsapie_loch_00005__b00.jpg.jpg
-    dunsapie_loch_00006__b.jpg.jpg
-    dunsapie_loch_00007__b0.jpg.jpg
-    dunsapie_loch_00008__b.jpg.jpg
-    dunsapie_loch_00009__b000.jpg.jpg
-    dunsapie_loch_00010__b.jpg.jpg
-    dunsapie_loch_00011__b0.jpg.jpg
+    dunsapie_loch_00001__b0000.jpg
+    dunsapie_loch_00002__b.jpg
+    dunsapie_loch_00003__b0.jpg
+    dunsapie_loch_00004__b.jpg
+    dunsapie_loch_00005__b00.jpg
+    dunsapie_loch_00006__b.jpg
+    dunsapie_loch_00007__b0.jpg
+    dunsapie_loch_00008__b.jpg
+    dunsapie_loch_00009__b000.jpg
+    dunsapie_loch_00010__b.jpg
+    dunsapie_loch_00011__b0.jpg
 ```
 
 Those additions such as `b000` are known as 'scare codes' (geddit?).
