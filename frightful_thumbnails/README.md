@@ -74,10 +74,10 @@ For example:
 
 | Search term  | Result            |
 | ------------ | ----------------- |
-|  __b         | Show every image  |
-|  __b0        | Every 2nd image   |
-|  __b00       | Every 4th image   |
-|  __b000      | Every 8th image   |
+|  `__b`         | Show every image  |
+|  `__b0`        | Every 2nd image   |
+|  `__b00`       | Every 4th image   |
+|  `__b000`      | Every 8th image   |
 
 And works well for a Finder search that targets thumbnails for lots of videos -- in fact that's where it's quite powerful.
 
