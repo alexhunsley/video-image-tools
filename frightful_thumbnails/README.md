@@ -83,7 +83,7 @@ And it works well for a Finder search that targets thumbnails for lots of videos
 
 # How does this arcane magic work?
 
-It uses a simple fact about incrementing binary numbers: collections of *at least* N 0s at the right hand side (LSBs) of the binary number have frequency 2^N.
+It uses a simple fact about incrementing binary numbers: collections of *at least* N 0s at the right hand side (LSBs) of the binary number have frequency `1/2^N`.
 
 A chart makes this easier to see:
 
