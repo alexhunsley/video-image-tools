@@ -1,6 +1,6 @@
 # Frightful Thumbnails
 
-This is a helper that makes it more convenient to work with thumbnail images generated from videos, especially in Finder (Mac OS) or Explorer (Windows).
+This tool makes it more convenient to work with thumbnail images generated from videos, especially in Finder (Mac OS) or Explorer (Windows).
 
 (We'll assume Finder from now.)
 
