@@ -1,35 +1,32 @@
 # Frightful Thumbnails
 
-This tool makes it more convenient to work with thumbnail images generated from videos, especially in Finder (Mac OS) or Explorer (Windows).
-
-(We'll assume Finder from now.)
+This tool makes it more convenient to work with thumbnail images generated from videos, especially in the windowed file manager of YourFavouriteOS (so Finder in Mac OS, Explorer in Windows, etc)
 
 # But what about Da Vinci/FCP/my favourite NLE?
 
 They're great! But sometimes you don't want to faff around launching these tools, or don't have them available.
 
-In those situations, thumbnails generated from videos are a handy preview tool that can be used in Finder by using Icon view mode.
+In those situations, thumbnails generated from videos are a handy preview tool that can be used in your OS by using Icon view mode.
 
 # Show me an example
 
-Suppose you have a video from your drone and you use something like `ffmpeg` to generate some jpg thumbnail images, one per second. For a 5 minute video that's 300 images.
+Suppose you have a video from a drone and you use something like `ffmpeg` to generate some jpg thumbnail images, one per second. For a 5 minute video that's 300 images.
 
-If you visit the folder of images in Finder, you can turn on Icon view and see previews of all images. It's a little awkward to get the whole gist of the video,
-as you have to scroll around, but it's doable.
+If you visit the folder of images in your OS, you can turn on Icon view and see previews of all images. It's a little awkward to get the whole gist of the video, as you have to scroll around, but it's doable.
 
 Suppose now you have 20 drone videos (each 5 mins), and thumbnails made for each.
 
-To preview them all, you can use the Search bar of Finder to find all .jpgs and view them as Icons. But now getting the gist of the videos' content is more annoying -- that's
+To preview them all, you can use the Search bar in your OS to find all .jpgs and view them as Icons. But now getting the gist of the videos' content is more annoying -- that's
 6000 images now to scroll through.
 
 Surely there's an easier way!
 
 # So how can Frightful Thumbnails help?
 
-This tool adds some special text to the end of each filename. Those additions let you use the Search bar to get a variable 'time stretching' effect on your thumbnails: you can view every other thumbnail,
+This tool adds some special text to the end of each filename. Those additions let you use the file Search bar to get a variable 'time stretching' effect on your thumbnails: you can view every other thumbnail,
 every 4th thumbnail, 8th, and so on. 
 
-This makes it very easy to get the gist of your video, or lots of videos.
+This makes it very easy to get  nice overview of your video content, or overview of lots of videos.
 
 # Example
 
