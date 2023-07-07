@@ -2,7 +2,7 @@
 
 This tool makes it more convenient to work with thumbnail images generated from videos, especially in the windowed file manager of YourFavouriteOS (so Finder in Mac OS, Explorer in Windows, etc)
 
-# But what about Da Vinci/FCP/my favourite NLE?
+# Why not just use Da Vinci/FCP/my favourite NLE?
 
 They're great! But sometimes you don't want to faff around launching these tools, or don't have them available.
 
@@ -76,10 +76,10 @@ For example:
 |  `__b00`       | Every 4th image   |
 |  `__b000`      | Every 8th image   |
 
-And it works well for a Finder search that targets thumbnails for lots of videos -- in fact that's where it's quite powerful.
+And it works well for a file search that targets thumbnails for lots of videos -- in fact that's where it's quite powerful.
 
 As a convenience, the tool always names the first and last image in a sequence with a unique (longest) "boo" code.
-In practice, this means if you search files for a boo code like "__b00" and just keep adding on zeroes, eventually you will just see the first and last frames of the video(s) in your Finder/Explorer search scope.
+In practice, this means if you search files for a code like "__b00" and just keep adding on zeroes, eventually you will just see the first and last frames of the video(s) in your OS file search results.
 
 # Wider usage
 
