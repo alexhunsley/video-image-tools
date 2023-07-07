@@ -81,6 +81,9 @@ For example:
 
 And it works well for a Finder search that targets thumbnails for lots of videos -- in fact that's where it's quite powerful.
 
+As a convenience, the tool always names the first and last image in a sequence with a unique (longest) "boo" code.
+In practice, this means if you search files for a boo code like "__b00" and just keep adding on zeroes, eventually you will just see the first and last frames of the video(s) in your Finder/Explorer search scope.
+
 # How does this arcane magic work?
 
 It uses a simple fact about incrementing binary numbers: collections of *at least* N 0s at the right hand side (LSBs) of the binary number have frequency `1/2^N`.
@@ -104,5 +107,6 @@ A chart makes this easier to see:
 |   13         |  1100              |  00             |   Y            |   Y           |                |
 |   14         |  1101              |                 |                |               |                |
 
-
+The strings of multiple `0` characters are  
+technically numbers expressed in base 1; and we are exploiting the fact that in base 1, a text match for a number `N` will also match every number > `N`.
 
