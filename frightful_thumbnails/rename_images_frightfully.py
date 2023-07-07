@@ -9,11 +9,8 @@ def number_bin_digits_needed_to_express_num_values(num_values):
 		return 1
 
 	p = math.log(num_values - 1, 2) + 1
-
 	# int is floor()
 	req_digits = int(p)
-
-	# print(f"num_values={num_values} p = {p} req_digits = {req_digits}")
 	return req_digits
 
 
@@ -39,17 +36,14 @@ def rename_files_in_directory(directory="."):
 		
 	first_and_last_images_num_digits = number_bin_digits_needed_to_express_num_values(len(files))
 
-	# files = files.sort()
 	files.sort()
 
-	# Pattern to find first decimal number with "_" before it
+	# find first decimal number with "_" before it
 	pattern = re.compile(r'[_-]\d+')
 
-	# Find the position and length of the first number in the first file
+	# find the first number in the first filename
 	first_file = files[0]
 	match = pattern.search(first_file)
-	# print(f"first_file = {first_file} match = {match}")
-
 	start, end = match.start() + 1, match.end()
 
 	for file in files:
@@ -59,10 +53,8 @@ def rename_files_in_directory(directory="."):
 			print(f"** Warning: saw a file that has already been processed? Will not rename it.  Current filename: {file}")
 			continue
 
-		# Extract the decimal number from the filename
+		# get decimal number from the filename
 		num = int(file[start:end]) - first_input_image_index
-
-		# print(f"num after -1 : {num}")
 
 		# Calculate the number of trailing zeros in the binary representation
 		if num == 0 or num == len(files) - 1:
@@ -79,19 +71,10 @@ def rename_files_in_directory(directory="."):
 		else:
 			number_of_r = count_trailing_zeros(num)
 
-		# print(f"num: {num} trailing zeroes: {number_of_r}")
-
-		# idx += 1
-		# if idx == 5:
-		# 	sys.exit(0)
-
-		# Construct the new filename
 		new_name = f"{file[:end]}__b{'0' * number_of_r}{file[end:]}"
-		
+
 		old_filename = os.path.join(directory, file)
 		new_filename = os.path.join(directory, new_name)
-		# print(f"Dry run: renaming {old_filename} {new_filename}")
-		# print(f"Dry run: renaming {file} {new_name}")
 
 		os.rename(old_filename, new_filename)
 
