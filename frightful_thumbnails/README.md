@@ -107,6 +107,5 @@ A chart makes this easier to see:
 |   13         |  1100              |  00             |   Y            |   Y           |                |
 |   14         |  1101              |                 |                |               |                |
 
-The strings of multiple `0` characters are  
-technically numbers expressed in base 1; and we are exploiting the fact that in base 1, a text match for a number `N` will also match every number > `N`.
+The strings of multiple `0` characters are technically numbers expressed in base 1; and we are exploiting the fact that in base 1, a text match for a number `N` will also match every number > `N`.
 
