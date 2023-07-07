@@ -98,10 +98,10 @@ If you add some `0` chars to the `__b` search term, you can iteratively drill up
 
 ![Screeshot of finder showing a lot of thumbnails for just the start of the blue video](readme_images/search_less_thumbnails.png)
 
-Now we can see a representative sample of all three videos' content, from start to end. The first and last frames of each video will always be featured too.
+Now we can see a representative sample of all three videos' content, from start to end.
 
 As a convenience, the tool always names the first and last image in a sequence with a unique (longest) "boo" code.
-In practice, this means if you search files for a code like `__b00` and just keep adding on zeroes, eventually you will just see the first and last frames of the video(s) in your OS file search results.
+This means if you search files for a code like `__b00` and just keep adding on zeroes, eventually you will just see the first and last frames of the video(s) in your OS file search results.
 
 # Wider usage
 
