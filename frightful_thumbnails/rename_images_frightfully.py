@@ -52,9 +52,13 @@ def rename_files_in_directory(directory="."):
 
 	start, end = match.start() + 1, match.end()
 
-	# special case for index 0!
-	# t    
 	for file in files:
+		if "__b" in file:
+			# Skipping already processed files makes sense, and also allows user to run tool again if images with
+			# appropriate continuing numbers were added to an already processed set 
+			print(f"** Warning: saw a file that has already been processed? Will not rename it.  Current filename: {file}")
+			continue
+
 		# Extract the decimal number from the filename
 		num = int(file[start:end]) - first_input_image_index
 
@@ -91,5 +95,6 @@ def rename_files_in_directory(directory="."):
 
 		os.rename(old_filename, new_filename)
 
+		print(f"Renamed {old_filename} to {new_filename}")
 
 rename_files_in_directory()
