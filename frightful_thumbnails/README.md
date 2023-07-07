@@ -1,12 +1,14 @@
 # Frightful Thumbnails
 
-This tool makes it more convenient to work with thumbnail images generated from videos, especially in the windowed file manager of YourFavouriteOS (so Finder in Mac OS, Explorer in Windows, etc)
+This tool makes it more convenient to preview thumbnail images generated from videos, particularly in the windowed file manager of YourFavouriteOS (so Finder in Mac OS, Explorer in Windows, etc)
+
+It's extra helpful when you're dealing with many videos.
 
 # Why not just use Da Vinci/FCP/my favourite NLE?
 
 They're great! But sometimes you don't want to faff around launching these tools, or don't have them available.
 
-In those situations, thumbnails generated from videos are a handy preview tool that can be used in your OS by using Icon view mode.
+In those situations, thumbnails generated from videos are a handy preview tool that can be used in your OS by using the Icon view mode.
 
 # Show me an example
 
@@ -26,11 +28,11 @@ Surely there's an easier way!
 This tool adds some special text to the end of each filename. Those additions let you use the file Search bar to get a variable 'time stretching' effect on your thumbnails: you can view every other thumbnail,
 every 4th thumbnail, 8th, and so on. 
 
-This makes it very easy to get  nice overview of your video content, or overview of lots of videos.
+This makes it very easy to get nice overview of your video content, or overview of lots of videos.
 
 # Example
 
-Imagine you have thumbnail jpgs for a short video:
+Suppose you have these thumbnail jpgs for a short video:
 
 ```
     dunsapie_loch_00001.jpg
@@ -46,7 +48,15 @@ Imagine you have thumbnail jpgs for a short video:
     dunsapie_loch_00011.jpg
 ```
 
-After running Frightful Thumbnails, the files are renamed like this:
+Run the script in the same directory as the thumbnails:
+
+```
+❯ python rename_images_frightfully.py
+```
+
+The script only works on the current directory and doesn't look in sub-directories.
+
+Now the files have been renamed:
 
 ```
     dunsapie_loch_00001__b0000.jpg
@@ -78,8 +88,20 @@ For example:
 
 And it works well for a file search that targets thumbnails for lots of videos -- in fact that's where it's quite powerful.
 
+Here's a little example: suppose you have 3 hour-long videos, each with a different colour background and timestamp.
+
+If you search in the top folder of your thumbnail content for `.jpg` or `__b` (which means 'all images') you will only see thumbs for a tiny bit of first video:
+
+![Screeshot of finder showing a lot of thumbnails for just the start of the blue video](readme_images/search_all_thumbnails.png)
+
+If you add some `0` chars to the `__b` search term, you can iteratively drill up to a detail level that gives you the thumbnail count you want:
+
+![Screeshot of finder showing a lot of thumbnails for just the start of the blue video](readme_images/search_less_thumbnails.png)
+
+Now we can see a representative sample of all three videos' content, from start to end. The first and last frames of each video will always be featured too.
+
 As a convenience, the tool always names the first and last image in a sequence with a unique (longest) "boo" code.
-In practice, this means if you search files for a code like "__b00" and just keep adding on zeroes, eventually you will just see the first and last frames of the video(s) in your OS file search results.
+In practice, this means if you search files for a code like `__b00` and just keep adding on zeroes, eventually you will just see the first and last frames of the video(s) in your OS file search results.
 
 # Wider usage
 

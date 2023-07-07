@@ -8,7 +8,6 @@ do
 	echo "${i}"
 	mkdir "${i}.grabs"
 
-
 	ffmpeg -i "${i}" -r "${FPS}" -f image2 "${i}.grabs/${i}--%09d.jpg"
 done
 
