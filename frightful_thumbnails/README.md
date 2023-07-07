@@ -84,6 +84,12 @@ And it works well for a Finder search that targets thumbnails for lots of videos
 As a convenience, the tool always names the first and last image in a sequence with a unique (longest) "boo" code.
 In practice, this means if you search files for a boo code like "__b00" and just keep adding on zeroes, eventually you will just see the first and last frames of the video(s) in your Finder/Explorer search scope.
 
+# Wider usage
+
+This tool was inspired by my use of video thumbnails for drone footage. But it can be used on any sequence of files as long as filenames contain number sequences, e.g. `000`, `001`.
+
+It would be fairly easy (but perhaps a little dangerous) to remove the requirement for filenames to contain number sequences: we just sort the files found (alphabetically perhaps), then  increment an index as we process each file.
+
 # How does this arcane magic work?
 
 It uses a simple fact about incrementing binary numbers: collections of *at least* N 0s at the right hand side (LSBs) of the binary number have frequency `1/2^N`.
