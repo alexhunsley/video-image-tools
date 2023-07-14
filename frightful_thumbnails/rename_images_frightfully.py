@@ -3,6 +3,12 @@ import re
 import sys
 import math
 
+
+start_marker = "__bbStart"
+middle_marker = "__bbMiddle"
+end_marker = "__bbEnd"
+
+
 def number_bin_digits_needed_to_express_num_values(num_values):
 
 	# edge cases
@@ -53,11 +59,11 @@ def rename_files_in_directory(directory="."):
 	# helpful bookending tags for minimal search
 	# edge cases!
 	if len(files) == 1:
-		extra_filename_tags = {0: "__start__middle__end"}
+		extra_filename_tags = {0: f"{start_marker}{middle_marker}{end_marker}"}
 	elif len(files) == 2:
-		extra_filename_tags = {0: "__start", 1: "__middle__end"	}
+		extra_filename_tags = {0: "start_marker", 1: f"{middle_marker}{end_marker}"}
 	else:
-		extra_filename_tags = {0: "__start", int(len(files)/2): "__middle", len(files) - 1: "__end"}
+		extra_filename_tags = {0: start_marker, int(len(files)/2): middle_marker, len(files) - 1: end_marker}
 
 	first_and_last_images_num_digits = number_bin_digits_needed_to_express_num_values(len(files))
 
