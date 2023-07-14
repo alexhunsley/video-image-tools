@@ -18,17 +18,17 @@ If you visit the folder of images in your OS, you can turn on Icon view and see 
 
 Suppose now you have 20 drone videos (each 5 mins), and thumbnails made for each.
 
-To preview them all, you can use the Search bar in your OS to find all .jpgs and view them as Icons. But now getting the gist of the videos' content is more annoying -- that's
+To preview them all, you can use the Search bar in your OS to find all .jpgs and view them as Icons. But now getting a meaningful overview of the videos' content is more annoying -- that's
 6000 images now to scroll through.
 
 Surely there's an easier way!
 
 # So how can Frightful Thumbnails help?
 
-This tool adds some special text to the end of each filename. Those additions let you use the file Search bar to get a variable 'time stretching' effect on your thumbnails: you can view every other thumbnail,
+This tool adds some special text to the end of each filename. Those additions let you use your OS' Search bar to get a variable 'time stretching' effect on your thumbnails: you can view every other thumbnail,
 every 4th thumbnail, 8th, and so on. 
 
-This makes it very easy to get nice overview of your video content, or overview of lots of videos.
+This makes it very easy to get nice overview of your video content, even for multiple videos.
 
 # Example
 
@@ -59,17 +59,17 @@ The script only works on the current directory and doesn't look in sub-directori
 Now the files have been renamed:
 
 ```
-    dunsapie_loch_00001__b0000.jpg
+    dunsapie_loch_00001__b0000__bbStart.jpg
     dunsapie_loch_00002__b.jpg
     dunsapie_loch_00003__b0.jpg
     dunsapie_loch_00004__b.jpg
     dunsapie_loch_00005__b00.jpg
-    dunsapie_loch_00006__b.jpg
+    dunsapie_loch_00006__b__bbMiddle.jpg
     dunsapie_loch_00007__b0.jpg
     dunsapie_loch_00008__b.jpg
     dunsapie_loch_00009__b000.jpg
     dunsapie_loch_00010__b.jpg
-    dunsapie_loch_00011__b0.jpg
+    dunsapie_loch_00011__b0000__bbEnd.jpg
 ```
 
 Those additions such as `b000` are known as 'scare codes' (geddit?).
@@ -102,6 +102,8 @@ Now we can see a representative sample of all three videos' content, from start 
 
 As a convenience, the tool always names the first and last image in a sequence with a unique (longest) "boo" code.
 This means if you search files for a code like `__b00` and just keep adding on zeroes, eventually you will just see the first and last frames of the video(s) in your OS file search results.
+
+The tool also names the first, last and middle(-ish) image to contain text `__bbStart`, `__bbMiddle`, and `__bbEnd`. This way you can view all such images across many videos by searching for just `__bb`, or a more specific term e.g. `__bbMiddle`.
 
 # Wider usage
 
