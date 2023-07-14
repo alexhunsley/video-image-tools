@@ -109,7 +109,7 @@ The tool also names the first, last and middle(-ish) image to contain text `__bb
 
 This tool was inspired by my use of video thumbnails for drone footage. But it can be used on any sequence of files as long as filenames contain number sequences, e.g. `000`, `001`.
 
-It would be fairly easy (but perhaps a little dangerous) to remove the requirement for filenames to contain number sequences: we just sort the files found (alphabetically perhaps), then  increment an index as we process each file.
+It would be fairly easy (but perhaps a little dangerous) to remove the requirement for filenames to contain number sequences: we would just sort the files found (alphabetically perhaps), then increment an index as we process each file.
 
 # How does this arcane magic work?
 
@@ -134,5 +134,9 @@ A chart makes this easier to see:
 |   13         |  1100              |  00             |   Y            |   Y           |                |
 |   14         |  1101              |                 |                |               |                |
 
+Another way of thinking of it:
+
 The strings of multiple `0` characters are technically numbers expressed in base 1; and we are exploiting the fact that in base 1, a text match for a number `N` will also match every number > `N`.
+
+Base 1 is the only number base with this property.
 
