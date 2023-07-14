@@ -3,14 +3,6 @@ import re
 import sys
 import math
 
-# this sometimes produces too many 0s, see e.g. 5 files:
-#    output.mp4--000000001__b000__start.jpg
-#    output.mp4--000000002__b.jpg
-#    output.mp4--000000003__b0__middle.jpg
-#    output.mp4--000000004__b.jpg
-#    output.mp4--000000005__b000__end.jpg
-#
-# It's a problem only at 2^N+1 like 3, 5, 9, etc.
 def number_bin_digits_needed_to_express_num_values(num_values):
 
 	# edge cases
