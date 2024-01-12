@@ -1,0 +1,77 @@
+file title 1,7afb
+This is the description, it can contain commas
+entire_video_tag1,tag2_with_underscore,tag3
+-01:26,04ff,seg 1 desc,segment_tag_1,segment_tag_2
+01:28-01:36,11bb,,segment_tag_A,segment_tag_B
+01:38-,02de,seg 3 desc,a_segment_tag,and_another_tag,and_more
+
+
+
+This produces a file named "file title 1.toml", containing the following:
+
+
+
+```
+[[video]]
+## Auto-generated toml; the file title given was "file title 1"
+# video_filename = ""
+# watermark_home = "images"
+# watermark_filename = "h=(grid1.png=grid2.png)=(grid3.png=(grid4.png=grid1.png=grid2.png))"
+# watermark_dimension = 200
+
+clip_rect = "7afb"
+desc = "This is the description, it can contain commas"
+
+tags = ["entire_video_tag1", "tag2_with_underscore", "tag3"]
+
+
+
+
+
+[[video.segments]]
+#watermark_filename = ""
+#watermark_position = [0, 0]
+
+description = "seg 1 desc"
+
+clip_end = "01:26"
+
+clip_rect = "04ff"
+
+tags = ["segment_tag_1", "segment_tag_2"]
+
+
+
+[[video.segments]]
+#watermark_filename = ""
+#watermark_position = [0, 0]
+
+clip_start = "01:28"
+clip_end = "01:36"
+
+clip_rect = "11bb"
+
+tags = ["segment_tag_A", "segment_tag_B"]
+
+
+
+[[video.segments]]
+#watermark_filename = ""
+#watermark_position = [0, 0]
+
+description = "seg 3 desc"
+
+clip_start = "01:38"
+
+clip_rect = "02de"
+
+tags = ["a_segment_tag", "and_another_tag", "and_more"]
+```
+
+
+Notes:
+
+The strings in the position of "7afb" is optional, if not given, the clip_rect under video in the toml is not given.
+The two parts of the string for clip_start and clip_end are optional; if either or both are missing, don't specify clip_start/clip_end as appropriate.
+
+
