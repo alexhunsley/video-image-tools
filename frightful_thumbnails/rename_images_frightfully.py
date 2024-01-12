@@ -65,17 +65,21 @@ def rename_files_in_directory(directory="."):
 	else:
 		extra_filename_tags = {0: start_marker, int(len(files)/2): middle_marker, len(files) - 1: end_marker}
 
+	print(f"it is: {extra_filename_tags}")
+
 	first_and_last_images_num_digits = number_bin_digits_needed_to_express_num_values(len(files))
 
 	files.sort()
 
 	# find first decimal number with "_" before it
-	pattern = re.compile(r'[_-]\d+')
+	# pattern = re.compile(r'[_-]\d+')
+	# find "__" before digits for the frame number
+	pattern = re.compile(r'--\d+')
 
 	# find the first number in the first filename
 	first_file = files[0]
 	match = pattern.search(first_file)
-	frame_num_start_idx, frame_num_end_idx = match.start() + 1, match.end()
+	frame_num_start_idx, frame_num_end_idx = match.start() + 2, match.end()
 
 	files_processed = 0
 	
@@ -89,6 +93,7 @@ def rename_files_in_directory(directory="."):
 		# get decimal number from the filename
 		num = int(file[frame_num_start_idx:frame_num_end_idx]) - first_input_image_index
 
+		print(f"num = {num}")
 		# Calculate the number of trailing zeros in the binary representation
 		if num == 0 or num == len(files) - 1:
 			# Special case for image 0 since we need to represent all possible digits in the binary
@@ -103,6 +108,9 @@ def rename_files_in_directory(directory="."):
 			number_of_r = count_trailing_zeros(num)
 
 		extra_tag = extra_filename_tags.get(num) or ""
+
+		if len(extra_tag) > 0:
+			print(f" ____________________________ HERUS: got extra tag = {extra_tag}")
 
 		new_name = f"{file[:frame_num_end_idx]}__b{'0' * number_of_r}{extra_tag}{file[frame_num_end_idx:]}"
 
