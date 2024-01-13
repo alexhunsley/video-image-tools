@@ -1,5 +1,23 @@
 # generate_inbetween_values.py
 
+
+# Not well formed currently, in that we can get e.g. this which violates the x or x+1
+# occurences of consecutive "*" or ".":
+#
+# 17 12   *.***.***.***.**.
+#
+# Oh hold on, CAN this be well-formed? 
+# YES, just swap first and last chars:
+#
+#   ..***.***.***.***   (3 stars everywhere, 2 or 1 dots everywhere)
+# 
+# I think putting back the optimization (subtracting gaps from full range when D < 2)
+# would force * and . symettry for low-high numbers though (e.g. 5 1 and 5 4, etc; generally N, x  and N, N-x).
+# Ideally the alg would be symmatrical as-in, without doing this.
+#
+# Wonder if Bresenhams is naturally symmetrical? It minimises errors, so maybe.
+#
+
 # TODO do something about M being low (0 or 1) when one or both ends are open!
 # Should it be an error? It shouldn't just be swallowed up, you're requesting
 # something bad which shouldn't be glossed over. Unless we take closed start, end
