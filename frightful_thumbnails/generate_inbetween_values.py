@@ -162,7 +162,8 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
     current_value = 0 if closed_start else -1
 
     # every time bump % S == 0 we increment current_value by 1
-    bump_index = 0
+    # bump_index = 0
+    bump_index_offset = 1 + (S // 2 if S else 0)
     
     # for idx in range(0, M - 2):
     for idx in range(0, M):
@@ -170,10 +171,9 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
         current_value += D
         
         # if idx < (M - 2) and S and (idx + 1) % S == 0:
-        if S and (idx + 1) % S == 0:
+        if S and (idx + bump_index_offset) % S == 0:
             current_value += 1
 
-        bump_index += 1
     #     # Distribute the remainder evenly across the intervals
     #     if R > 0:
     #         current_value += 1
@@ -354,4 +354,46 @@ exhaustive_test_both_closed()
 #     import doctest
 #     debug_enabled = False
 #     doctest.testmod()
+
+
+
+# output before doing the symmetry improvement (e43256b):
+#
+# 2  2   **
+# 3  2   *.*
+# 3  3   ***
+# 4  2   *..*
+# 4  3   *.**
+# 4  4   ****
+# 5  2   *...*
+# 5  3   *.*.*
+# 5  4   ***.*   <-- bad symmetry
+# 5  5   *****
+# 6  2   *....*
+# 6  3   *..*.*
+# 6  4   *.*.**
+# 6  5   ****.*   <-- bad symmetry
+# 6  6   ******
+# 7  2   *.....*
+# 7  3   *..*..*
+# 7  4   *.*.*.*
+# 7  5   **.**.*
+# 7  6   *****.*   <-- bad symmetry
+# 7  7   *******
+# 8  2   *......*
+# 8  3   *...*..*
+# 8  4   *.*.*..*
+# 8  5   *.*.*.**
+# 8  6   **.**.**
+# 8  7   ******.*
+# 8  8   ********
+# 9  2   *.......*
+# 9  3   *...*...*
+# 9  4   *..*..*.*
+# 9  5   *.*.*.*.*
+# 9  6   *.*.*.*.*
+# 9  7   ***.***.*   <-- bad symmetry
+# 9  8   *******.*   <-- bad symmetry
+# 9  9   *********
+#
 
