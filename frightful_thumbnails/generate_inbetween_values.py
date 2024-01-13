@@ -7,6 +7,9 @@ def debug(msg, end='\n'):
 
 # N is number of value total, M is number we want to pick (evenly spaced in N)
 def select_values(result_array, N, M, start_index = 0, closed_start = True, closed_end = True, allow_optimisation = True, is_inner = False):
+    print(f" SADASDASDSADSADASDASDSADSADASDASD allow_optimisation = {allow_optimisation}")
+
+    assert allow_optimisation == False
     """
     Select M values from N.
 
@@ -51,6 +54,8 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
         result_array.append(0) 
     # values = [0] if closed_start else []
 
+
+
     # the inner call to this func has false for both these vars so we won't end up in here on inner call
     if closed_start or closed_end:
         use_start_index = 1 if closed_start else 0
@@ -64,7 +69,7 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
             M -= 1
 
         print(f" BEFORE Inner call, result_array = {result_array}, and calling with N, M = {N} {M}")
-        select_values(result_array, N, M, start_index = use_start_index, closed_start = False, closed_end = False)
+        select_values(result_array, N, M, start_index = use_start_index, closed_start = False, closed_end = False, allow_optimisation = allow_optimisation)
         print(f" AFTER Inner call, result_array = {result_array}")
 
         if closed_end:
@@ -78,7 +83,7 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
     # avoid division by zero in degenerate case M = 1
     if M == 1:
         debug(f"Got M = 1, so appending N // 2 = [{N // 2}]")
-        result_array.append(N // 2)
+        result_array.append(start_index + N // 2)
         return
 
     # if not closed and not is_inner:
@@ -119,7 +124,7 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
         # for 4, 3 this is called with 2, 1
 
         # gap_indexes = select_values(N - 2, N - M, closed = False, is_inner = True)
-        gap_indexes = select_values(N - 2, N - M, is_inner = True)
+        gap_indexes = select_values(N - 2, N - M, is_inner = True, allow_optimisation = allow_optimisation)
         
         debug(f">>>>>>>>> gap_indexes: {gap_indexes} count = {len(gap_indexes)}")
 
@@ -168,6 +173,7 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
     #         remainder -= 1
         
     #     # Add the current value to the list
+        print(f" ------------------------> start_index = {start_index}")
         result_array.append(current_value + start_index)
         # result_array.append(current_value)
     
@@ -180,14 +186,15 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
     # return values
 
 
-def run(N, M, closed_start = True, closed_end = True, allow_optimisation = True):
+# def run(N, M, closed_start = True, closed_end = True, allow_optimisation = True):
+def run(N, M, closed_start = True, closed_end = True, allow_optimisation = False): # disabling optimisation completely for now! we assert on it being False elsewhere too
     debug("------------------------------------")
     debug("------------------------------------")
     debug("\n")
 
     result = []
 # result_array, N, M, start_index = 0, closed_start = True, closed_end = True, allow_optimisation = True, is_inner = False)
-    select_values(result, N, M, closed_start = closed_start, closed_end = closed_end, allow_optimisation = False)
+    select_values(result, N, M, closed_start = closed_start, closed_end = closed_end, allow_optimisation = allow_optimisation)
 
     debug(f"-->> for N: {N}, M: {M}, closed_st: {closed_start}, closed_end = {closed_end}, allow_optimisation = {allow_optimisation}: {result}  ", end='')
 
@@ -275,7 +282,15 @@ def exhastive_test():
 
 # exhastive_test()
 
-run(3, 2)
+# this produces **..* which isn't very pleasing! Would rather get "*.*.*".
+
+
+run(5, 3)
+
+run(3, 1, closed_start = False, closed_end = False)
+
+# allow_optimisation is forced to False right now!
+# run(5, 3, allow_optimisation = False)
 
 # # run(11, 10)
 # run(4, 3)
