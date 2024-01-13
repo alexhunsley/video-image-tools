@@ -16,6 +16,7 @@ def debug(msg = "", end = '\n'):
 # N is number of value total, M is number we want to pick (evenly spaced in N)
 def select_values(result_array, N, M, start_index = 0, closed_start = True, closed_end = True, allow_optimisation = True, is_inner = False):
 
+    debug(F"___ select_values called with {N}, {M}")
     assert allow_optimisation == False
     """
     Select M values from N.
@@ -100,9 +101,11 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
     #     M += 2
 
     # use_m = M - 1
-    use_m = M + 1
+    # use_n = N + 1
+    # use_m = M + 1
 
-    use_n = N + 1
+    use_n = N
+    use_m = M
 
     # if not closed_start: 
     #     use_m += 1
@@ -112,13 +115,13 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
     # with open start and end, we want to use M + 1?!
     # so add one to M - 1 for each of start, end that is open.
     D = use_n // use_m
-    debug(f"D: {D}")
+    debug(f"D: {D} (from use_n, use_m = {use_n} {use_m})")
     
     # Calculate the remainder to adjust spacing
     R = use_n % use_m
     debug(f"R: {R}")
 
-    S = use_m // R if R > 0 else None
+    S = (1 + use_m // R) if R > 0 else None
     debug(f"S: {S}")
 
     # optimisation: start with entire range if there are more values than holes
@@ -148,50 +151,37 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
 
         return numbers
 
-    # Initialize the list of values, starting with 0
-    
-    # values = [0] if closed else []
     debug(f">>>>>>>>> NO optimising")
-
-    
 
     spaces = N - M
     debug(f"spaces: {spaces}")
 
-    # Current value
-    current_value = 0 if closed_start else -1
+    # start_indexo = 0 if closed_start else -1
+    start_indexo = 0 if closed_start else -D
 
-    # every time bump % S == 0 we increment current_value by 1
-    # bump_index = 0
-    bump_index_offset = 1 + (S // 2 if S else 0)
-    
-    # for idx in range(0, M - 2):
+    current_value = start_indexo
+
+    # just a symmetry fix, disable for now
+    # bump_index_offset = 1 + (S // 2 if S else 0)
+    bump_index_offset = 0
+
+    debug(f"                       >>> S = {S} so bump offset = {bump_index_offset}")
+
+    # for idx in range(0, M - start_indexo):
+    # for idx in range(start_indexo, M):
     for idx in range(0, M):
-        # Add the interval D to the current value
+        debug(f"incr: {current_value} + {D} => {current_value + D}")
         current_value += D
         
-        # if idx < (M - 2) and S and (idx + 1) % S == 0:
-        if S and (idx + bump_index_offset) % S == 0:
+        if S and idx > 0 and (idx + bump_index_offset) % S == 0:
+            debug(f"   ... bumping +1")
             current_value += 1
 
-    #     # Distribute the remainder evenly across the intervals
-    #     if R > 0:
-    #         current_value += 1
-    #         remainder -= 1
-        
-    #     # Add the current value to the list
         debug(f" ------------------------> start_index = {start_index}")
         result_array.append(current_value + start_index)
         # result_array.append(current_value)
     
-    # # Always include N as the last value
-    # values.append(N)
-
-    # if closed:  
-    #     values.append(N - 1)
-
-    # return values
-
+    debug(f"     ... final array: {result_array}")
 
 # def run(N, M, closed_start = True, closed_end = True, allow_optimisation = True):
 def run(N, M, closed_start = True, closed_end = True, allow_optimisation = False): # disabling optimisation completely for now! we assert on it being False elsewhere too
@@ -200,12 +190,9 @@ def run(N, M, closed_start = True, closed_end = True, allow_optimisation = False
     debug("\n")
 
     result = []
-# result_array, N, M, start_index = 0, closed_start = True, closed_end = True, allow_optimisation = True, is_inner = False)
     select_values(result, N, M, closed_start = closed_start, closed_end = closed_end, allow_optimisation = allow_optimisation)
 
     debug(f"-->> for N: {N}, M: {M}, closed_st: {closed_start}, closed_end = {closed_end}, allow_optimisation = {allow_optimisation}: {result}  ", end='')
-
-    # asci repr
 
     debug()
 
@@ -220,11 +207,14 @@ def run(N, M, closed_start = True, closed_end = True, allow_optimisation = False
             debug("Found NO i in results, adding .")
             result_str += "."
             # print(".", end='')
+
     debug()
 
     debug(f"__x {result_str} x__")
 
     # return f"{result_str}"
+    debug(f"Should match: count = {result_str.count('*')}, M = {M}, str = {result_str}")
+    assert result_str.count("*") == M
 
     n_formatted = f"{N}".rjust(2)
     m_formatted = f"{M}".rjust(2)
@@ -290,7 +280,7 @@ def exhaustive_test_both_closed():
             result_str = run(n, m)
             print(f"{result_str}")
             debug(result_str.count("*"))
-
+        print()
 
 def exhaustive_test_both_open():
     for n in range(0, 10):
@@ -300,10 +290,26 @@ def exhaustive_test_both_open():
             result_str = run(n, m, closed_start = False, closed_end = False)
             print(f"{result_str}")
             debug(result_str.count("*"))
-
+        print()
 
 exhaustive_test_both_closed()
-# exhaustive_test_both_open()
+
+print()
+
+# ouch!
+# 9  4   .*.*.*.*.
+# 9  5   .*.*.*.*.
+
+exhaustive_test_both_open()
+
+# print(run(5, 2, closed_start = False, closed_end = False))
+# print(run(5, 3, closed_start = False, closed_end = False))
+# print(run(5, 4, closed_start = False, closed_end = False))
+
+# print(run(8, 5, closed_start = False, closed_end = False))
+
+# print(run(9, 4, closed_start = False, closed_end = False))
+# print(run(9, 5, closed_start = False, closed_end = False))
 
 # this produces **..* which isn't very pleasing! Would rather get "*.*.*".
 
@@ -396,4 +402,43 @@ exhaustive_test_both_closed()
 # 9  8   *******.*   <-- bad symmetry
 # 9  9   *********
 #
+
+# after symmetry fix ():
+#
+# 2  2   **
+# 3  2   *.*
+# 3  3   ***
+# 4  2   *..*
+# 4  3   *.**
+# 4  4   ****
+# 5  2   *...*
+# 5  3   *.*.*
+# 5  4   **.**
+# 5  5   *****
+# 6  2   *....*
+# 6  3   *..*.*
+# 6  4   *.*.**
+# 6  5   **.***
+# 6  6   ******
+# 7  2   *.....*
+# 7  3   *..*..*
+# 7  4   *.*.*.*
+# 7  5   *.**.**
+# 7  6   ***.***
+# 7  7   *******
+# 8  2   *......*
+# 8  3   *...*..*
+# 8  4   *.*..*.*
+# 8  5   *.*.*.**
+# 8  6   *.**.***
+# 8  7   ***.****
+# 8  8   ********
+# 9  2   *.......*
+# 9  3   *...*...*
+# 9  4   *..*..*.*
+# 9  5   *.*.*.*.*
+# 9  6   *.*.*.*.*
+# 9  7   **.***.**
+# 9  8   ****.****
+# 9  9   *********
 
