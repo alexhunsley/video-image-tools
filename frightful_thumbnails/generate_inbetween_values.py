@@ -7,15 +7,14 @@
 # the value of M, or does M override the flags", and it's ambiguous and annoying.
 
 
-debug_enabled = True
+debug_enabled = False
 
-def debug(msg, end='\n'):
+def debug(msg = "", end = '\n'):
     if debug_enabled:
         print(msg, end=end)
 
 # N is number of value total, M is number we want to pick (evenly spaced in N)
 def select_values(result_array, N, M, start_index = 0, closed_start = True, closed_end = True, allow_optimisation = True, is_inner = False):
-    print(f" SADASDASDSADSADASDASDSADSADASDASD allow_optimisation = {allow_optimisation}")
 
     assert allow_optimisation == False
     """
@@ -76,9 +75,9 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
             N -= 1
             M -= 1
 
-        print(f" BEFORE Inner call, result_array = {result_array}, and calling with N, M = {N} {M}")
+        debug(f" BEFORE Inner call, result_array = {result_array}, and calling with N, M = {N} {M}")
         select_values(result_array, N, M, start_index = use_start_index, closed_start = False, closed_end = False, allow_optimisation = allow_optimisation)
-        print(f" AFTER Inner call, result_array = {result_array}")
+        debug(f" AFTER Inner call, result_array = {result_array}")
 
         if closed_end:
             result_array.append(original_n - 1)
@@ -181,7 +180,7 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
     #         remainder -= 1
         
     #     # Add the current value to the list
-        print(f" ------------------------> start_index = {start_index}")
+        debug(f" ------------------------> start_index = {start_index}")
         result_array.append(current_value + start_index)
         # result_array.append(current_value)
     
@@ -208,24 +207,28 @@ def run(N, M, closed_start = True, closed_end = True, allow_optimisation = False
 
     # asci repr
 
-    print()
+    debug()
 
     result_str = ""
     for i in range(N):
-        print(f"Checking i = {i}  ... ", end='')
+        debug(f"Checking i = {i}  ... ", end='')
         if i in result:
-            print("Found i in results, adding *")
+            debug("Found i in results, adding *")
             result_str += "*"
             # print("*", end='')
         else:
-            print("Found NO i in results, adding .")
+            debug("Found NO i in results, adding .")
             result_str += "."
             # print(".", end='')
-    print()
+    debug()
 
-    print(f"__x {result_str} x__")
+    debug(f"__x {result_str} x__")
 
-    return result_str
+    # return f"{result_str}"
+
+    n_formatted = f"{N}".rjust(2)
+    m_formatted = f"{M}".rjust(2)
+    return f"{n_formatted} {m_formatted}   {result_str}"
 
 # Example Usage
 # run(3, 3)
@@ -285,7 +288,8 @@ def exhaustive_test_both_closed():
         for m in range(2, n + 1):
             # print(f"N: {n} M: {m}")
             result_str = run(n, m)
-            print(result_str.count("*"))
+            print(f"{result_str}")
+            debug(result_str.count("*"))
 
 
 def exhaustive_test_both_open():
@@ -294,7 +298,8 @@ def exhaustive_test_both_open():
         for m in range(0, n + 1):
             # print(f"N: {n} M: {m}")
             result_str = run(n, m, closed_start = False, closed_end = False)
-            print(result_str.count("*"))
+            print(f"{result_str}")
+            debug(result_str.count("*"))
 
 
 exhaustive_test_both_closed()
