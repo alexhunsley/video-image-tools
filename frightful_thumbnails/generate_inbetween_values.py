@@ -85,6 +85,9 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
 
         return
 
+
+    # we know that closed_start and closed_end are False after here!
+    
     debug(f"====================== is_inner = {is_inner}")
     debug(f"N: {N} M: {M}")
 
@@ -157,13 +160,13 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
     debug(f"spaces: {spaces}")
 
     # start_indexo = 0 if closed_start else -1
-    start_indexo = 0 if closed_start else -D
+    start_indexo = 0 if closed_start else -D//2
 
     current_value = start_indexo
 
     # just a symmetry fix, disable for now
-    # bump_index_offset = 1 + (S // 2 if S else 0)
-    bump_index_offset = 0
+    bump_index_offset = 1 + (S // 2 if S else 0)
+    # bump_index_offset = 0
 
     debug(f"                       >>> S = {S} so bump offset = {bump_index_offset}")
 
@@ -173,7 +176,8 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
         debug(f"incr: {current_value} + {D} => {current_value + D}")
         current_value += D
         
-        if S and idx > 0 and (idx + bump_index_offset) % S == 0:
+        # if S and idx > 0 and (idx + bump_index_offset) % S == 0:
+        if S and (idx + bump_index_offset) % S == 0:
             debug(f"   ... bumping +1")
             current_value += 1
 
