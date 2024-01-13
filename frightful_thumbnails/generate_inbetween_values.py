@@ -1,4 +1,12 @@
 # generate_inbetween_values.py
+
+# TODO do something about M being low (0 or 1) when one or both ends are open!
+# Should it be an error? It shouldn't just be swallowed up, you're requesting
+# something bad which shouldn't be glossed over. Unless we take closed start, end
+# as hints, not prescriptions! but then you have the problem of "do the flags overide
+# the value of M, or does M override the flags", and it's ambiguous and annoying.
+
+
 debug_enabled = True
 
 def debug(msg, end='\n'):
@@ -283,7 +291,6 @@ def exhastive_test():
 # exhastive_test()
 
 # this produces **..* which isn't very pleasing! Would rather get "*.*.*".
-
 
 run(5, 3)
 
