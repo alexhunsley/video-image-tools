@@ -279,8 +279,8 @@ def run(N, M, closed_start = True, closed_end = True, allow_optimisation = False
 # run(1, 0)
 # run(0, 0)
 
-def exhastive_test():
-    for n in range(2, 4):
+def exhaustive_test_both_closed():
+    for n in range(2, 10):
         # choosing 2 and up, since we've got closed at both ends currently
         for m in range(2, n + 1):
             # print(f"N: {n} M: {m}")
@@ -288,13 +288,25 @@ def exhastive_test():
             print(result_str.count("*"))
 
 
-# exhastive_test()
+def exhaustive_test_both_open():
+    for n in range(0, 10):
+        # choosing 2 and up, since we've got closed at both ends currently
+        for m in range(0, n + 1):
+            # print(f"N: {n} M: {m}")
+            result_str = run(n, m, closed_start = False, closed_end = False)
+            print(result_str.count("*"))
+
+
+exhaustive_test_both_closed()
+# exhaustive_test_both_open()
 
 # this produces **..* which isn't very pleasing! Would rather get "*.*.*".
 
-run(5, 3)
+# run(5, 3)
+# run(3, 1, closed_start = False, closed_end = False)
 
-run(3, 1, closed_start = False, closed_end = False)
+
+
 
 # allow_optimisation is forced to False right now!
 # run(5, 3, allow_optimisation = False)
