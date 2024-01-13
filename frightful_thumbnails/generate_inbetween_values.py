@@ -87,7 +87,7 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
 
 
     # we know that closed_start and closed_end are False after here!
-    
+
     debug(f"====================== is_inner = {is_inner}")
     debug(f"N: {N} M: {M}")
 
@@ -97,34 +97,16 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
         result_array.append(start_index + N // 2)
         return
 
-    # if not closed and not is_inner:
-    # # if not closed:
-    #     # we're not having items at first, last index, so add 2 to M
-    #     print(f" ()() adding 2 to M, now got M = {M}")
-    #     M += 2
-
-    # use_m = M - 1
-    # use_n = N + 1
-    # use_m = M + 1
-
-    use_n = N
-    use_m = M
-
-    # if not closed_start: 
-    #     use_m += 1
-    # if not closed_end: 
-    #     use_m += 1
-
     # with open start and end, we want to use M + 1?!
     # so add one to M - 1 for each of start, end that is open.
-    D = use_n // use_m
-    debug(f"D: {D} (from use_n, use_m = {use_n} {use_m})")
+    D = N // M
+    debug(f"D: {D} (from use_n, use_m = {N} {M})")
     
     # Calculate the remainder to adjust spacing
-    R = use_n % use_m
+    R = N % M
     debug(f"R: {R}")
 
-    S = (1 + use_m // R) if R > 0 else None
+    S = (1 + M // R) if R > 0 else None
     debug(f"S: {S}")
 
     # optimisation: start with entire range if there are more values than holes
@@ -159,8 +141,7 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
     spaces = N - M
     debug(f"spaces: {spaces}")
 
-    # start_indexo = 0 if closed_start else -1
-    start_indexo = 0 if closed_start else -D//2
+    start_indexo = -D//2
 
     current_value = start_indexo
 
