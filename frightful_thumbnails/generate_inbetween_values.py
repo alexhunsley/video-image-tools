@@ -257,8 +257,8 @@ def run(N, M, closed_start = True, closed_end = True, allow_optimisation = False
 # run(1, 0)
 # run(0, 0)
 
-def exhaustive_test_both_closed():
-    for n in range(2, 10):
+def exhaustive_test_both_closed(max_n = 10):
+    for n in range(2, max_n + 1):
         # choosing 2 and up, since we've got closed at both ends currently
         for m in range(2, n + 1):
             # print(f"N: {n} M: {m}")
@@ -267,8 +267,8 @@ def exhaustive_test_both_closed():
             debug(result_str.count("*"))
         print()
 
-def exhaustive_test_both_open():
-    for n in range(0, 10):
+def exhaustive_test_both_open(max_n = 10):
+    for n in range(0, max_n + 1):
         # choosing 2 and up, since we've got closed at both ends currently
         for m in range(0, n + 1):
             # print(f"N: {n} M: {m}")
@@ -277,7 +277,7 @@ def exhaustive_test_both_open():
             debug(result_str.count("*"))
         print()
 
-exhaustive_test_both_closed()
+exhaustive_test_both_closed(max_n = 20)
 
 print()
 
@@ -285,7 +285,7 @@ print()
 # 9  4   .*.*.*.*.
 # 9  5   .*.*.*.*.
 
-exhaustive_test_both_open()
+exhaustive_test_both_open(max_n = 20)
 
 # print(run(5, 2, closed_start = False, closed_end = False))
 # print(run(5, 3, closed_start = False, closed_end = False))
