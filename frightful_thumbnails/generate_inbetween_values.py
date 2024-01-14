@@ -124,7 +124,7 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
 
     # with open start and end, we want to use M + 1?!
     # so add one to M - 1 for each of start, end that is open.
-    D = N // M
+    D = (N // M)
     debug(f"D: {D} (from N, M = {N} {M})")
     
     # Calculate the remainder to adjust spacing
@@ -169,7 +169,20 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
 
     debug(f">>>>>>>>> NO optimising")
 
-    start_indexo = -D//2
+    # start_indexo = -D//2
+
+    gap_at_left = D - 1
+    gap_at_right = N - D*M   #N % D
+    diff = gap_at_left - gap_at_right
+
+    # -2 below breaks symmetry slightly towards left, -1 the right
+    # start_indexo = -(diff // 2)-2
+    # start_indexo = -(diff // 2) -2
+    start_indexo = -((diff - 1) // 2) - 2
+
+    debug(f" <>><>><><<> ({N} {M}) start_indexo = {start_indexo}  (left gap={gap_at_left}, right_gap={gap_at_right} diff = {diff}")
+
+    # start_indexo = (N - (D * M)) // 2
 
     current_value = start_indexo
 
