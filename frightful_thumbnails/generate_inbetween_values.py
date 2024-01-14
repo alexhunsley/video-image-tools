@@ -130,7 +130,7 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
 
     # optimisation: start with entire range if there are more values than holes
     if allow_optimisation and D < 2 and R > 0:
-        debug(f">>>>>>>>> optimising, because D = {D} (< 2) and R = {R} (> 0)")
+        print(f">>>>>>>>> optimising, because D = {D} (< 2) and R = {R} (> 0)")
 
         # I was trying this! no worky.
         # new_n = N if closed else N - 2
@@ -162,10 +162,10 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
     current_value = start_indexo
 
     # just a symmetry fix, disable for now
-    bump_index_offset = 1 + (S // 2 if S else 0)
+    # bump_index_offset = 1 + (S // 2 if S else 0)
     # bump_index_offset = 0
 
-    debug(f"                       >>> S = {S} so bump offset = {bump_index_offset}")
+    # debug(f"                       >>> S = {S} so bump offset = {bump_index_offset}")
 
     # for idx in range(0, M - start_indexo):
     # for idx in range(start_indexo, M):
@@ -174,9 +174,9 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
         current_value += D
         
         # if S and idx > 0 and (idx + bump_index_offset) % S == 0:
-        if S and (idx + bump_index_offset) % S == 0:
-            debug(f"   ... bumping +1")
-            current_value += 1
+        # if S and (idx + bump_index_offset) % S == 0:
+        #     debug(f"   ... bumping +1")
+        #     current_value += 1
 
         debug(f" ------------------------> start_index = {start_index}")
         result_array.append(current_value + start_index)
@@ -283,6 +283,7 @@ def exhaustive_test_both_closed(max_n = 10):
             debug(result_str.count("*"))
         print()
 
+
 def exhaustive_test_both_open(max_n = 10):
     for n in range(0, max_n + 1):
         # choosing 2 and up, since we've got closed at both ends currently
@@ -293,15 +294,28 @@ def exhaustive_test_both_open(max_n = 10):
             debug(result_str.count("*"))
         print()
 
-exhaustive_test_both_closed(max_n = 20)
 
-print()
+def exhaustive_test_both_open_down_to_d_equals_2(max_n = 10):
+    for n in range(0, max_n + 1):
+        # choosing 2 and up, since we've got closed at both ends currently
+        for m in range(0, n // 2 + 1):
+            # print(f"N: {n} M: {m}")
+            result_str = run(n, m, closed_start = False, closed_end = False)
+            print(f"{result_str}")
+            debug(result_str.count("*"))
+        print()
 
-# ouch!
-# 9  4   .*.*.*.*.
-# 9  5   .*.*.*.*.
+# exhaustive_test_both_closed(max_n = 20)
 
-exhaustive_test_both_open(max_n = 20)
+# print()
+
+# # ouch!
+# # 9  4   .*.*.*.*.
+# # 9  5   .*.*.*.*.
+
+# exhaustive_test_both_open(max_n = 20)
+
+exhaustive_test_both_open_down_to_d_equals_2()
 
 # print(run(5, 2, closed_start = False, closed_end = False))
 # print(run(5, 3, closed_start = False, closed_end = False))
