@@ -85,11 +85,6 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
 
     original_n = N
 
-
-    # values = [0] if closed_start else []
-
-
-
     # the inner call to this func has false for both these vars so we won't end up in here on inner call
     if closed_start or closed_end:
         use_start_index = start_index + 1 if closed_start else start_index
@@ -108,13 +103,11 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
         debug(f" AFTER Inner call, result_array = {result_array}")
 
         if closed_end:
-            result_array.append(original_n - 1)
+            result_array.append(start_index + original_n - 1)
 
         return
 
-
     # we know that closed_start and closed_end are False after here!
-
     debug(f"====================== is_inner = {is_inner}")
     debug(f"N: {N} M: {M}")
 
@@ -140,28 +133,10 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
     if allow_optimisation and D < 2 and R > 0:
         debug(f">>>>>>>>> optimising, because D = {D} (< 2) and R = {R} (> 0)")
 
-        # I was trying this! no worky.
-        # new_n = N if closed else N - 2
-        # gap_indexes = select_values(new_n, new_n - M, closed = False, is_inner = True)
-        # for 4, 3 this is called with 2, 1
-
-        # gap_indexes = select_values(N - 2, N - M, closed = False, is_inner = True)
-        # gap_indexes = select_values(N - 2, N - M, is_inner = True, allow_optimisation = allow_optimisation)
-
-        # TODO get rid of is_inner and just have an inner func we call here and also further down (for no optimisation)
-
         gap_indexes = []
         select_values(gap_indexes, N, N - M, start_index = start_index, closed_start = False, closed_end = False, allow_optimisation = allow_optimisation, is_inner = True)
         
         debug(f">>>>>>>>> gap_indexes: {gap_indexes} count = {len(gap_indexes) if gap_indexes else (None)}")
-
-        # is_inner shouldn't be true here, anyway
-        # if not closed and not is_inner:
-        # if closed:
-        #     # remove first and last indexes
-        #     debug(f"BEFORE {complete_range}")
-        #     complete_range = complete_range[1:-1]
-        #     debug(f"AFTER {complete_range}")
 
         index_range_with_gaps_removed = [i for i in target_range if not i in gap_indexes]
         debug(f">>>>>>>>> from range {range} and gap_indexes I've derived index_range_with_gaps_removed = {index_range_with_gaps_removed}")
@@ -170,33 +145,16 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
 
     debug(f">>>>>>>>> NO optimising")
 
-    # start_indexo = -D//2
-
     gap_at_left = D - 1
     gap_at_right = N - D*M   #N % D
     diff = gap_at_left - gap_at_right
 
     # -2 below breaks symmetry slightly towards left, -1 the right
-    # start_indexo = -(diff // 2)-2
-    # start_indexo = -(diff // 2) -2
-
-    # works for open, fails on closed
-    start_indexo = start_index -((diff - 1) // 2) - 2
+    start_indexo = start_index - ((diff - 1) // 2) - 2
 
     debug(f" <>><>><><<> ({N} {M}) start_indexo = {start_indexo}  (left gap={gap_at_left}, right_gap={gap_at_right} diff = {diff}")
-
-    # start_indexo = (N - (D * M)) // 2
-
     current_value = start_indexo
 
-    # just a symmetry fix, disable for now
-    # bump_index_offset = 1 + (S // 2 if S else 0)
-    # bump_index_offset = 0
-
-    # debug(f"                       >>> S = {S} so bump offset = {bump_index_offset}")
-
-    # for idx in range(0, M - start_indexo):
-    # for idx in range(start_indexo, M):
     for idx in range(M):
         debug(f"incr: {current_value} + {D} => {current_value + D}")
         current_value += D
