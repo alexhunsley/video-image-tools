@@ -37,7 +37,7 @@ def debug(msg = "", end = '\n'):
 def select_values(result_array, N, M, start_index = 0, closed_start = True, closed_end = True, allow_optimisation = True, is_inner = False):
 
     debug(F"___ select_values called with {N}, {M}")
-    assert allow_optimisation == False
+    # assert allow_optimisation == False
     """
     Select M values from N.
 
@@ -72,7 +72,13 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
     # >>> select_values(11, 9)
     # >>> select_values(11, 10)
 
-    if N ==0 or M == 0:
+    # short-circuit: choose no indexes
+    if N == 0 or M == 0:
+        return
+
+    # short-circuit: choose all indexes
+    if N == M:
+        result_array += range(N)
         return
 
     original_n = N
@@ -111,10 +117,10 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
     debug(f"N: {N} M: {M}")
 
     # avoid division by zero in degenerate case M = 1
-    # if M == 1:
-    #     debug(f"Got M = 1, so appending N // 2 = [{N // 2}]")
-    #     result_array.append(start_index + N // 2)
-    #     return
+    if M == 1:
+        debug(f"Got M = 1, so appending N // 2 = [{N // 2}]")
+        result_array.append(start_index + N // 2)
+        return
 
     # with open start and end, we want to use M + 1?!
     # so add one to M - 1 for each of start, end that is open.
@@ -130,7 +136,7 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
 
     # optimisation: start with entire range if there are more values than holes
     if allow_optimisation and D < 2 and R > 0:
-        print(f">>>>>>>>> optimising, because D = {D} (< 2) and R = {R} (> 0)")
+        debug(f">>>>>>>>> optimising, because D = {D} (< 2) and R = {R} (> 0)")
 
         # I was trying this! no worky.
         # new_n = N if closed else N - 2
@@ -138,9 +144,14 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
         # for 4, 3 this is called with 2, 1
 
         # gap_indexes = select_values(N - 2, N - M, closed = False, is_inner = True)
-        gap_indexes = select_values(N - 2, N - M, is_inner = True, allow_optimisation = allow_optimisation)
+        # gap_indexes = select_values(N - 2, N - M, is_inner = True, allow_optimisation = allow_optimisation)
+
+        # TODO get rid of is_inner and just have an inner func we call here and also further down (for no optimisation)
+
+        gap_indexes = []
+        select_values(gap_indexes, N, N - M, closed_start = False, closed_end = False, allow_optimisation = allow_optimisation, is_inner = True)
         
-        debug(f">>>>>>>>> gap_indexes: {gap_indexes} count = {len(gap_indexes)}")
+        debug(f">>>>>>>>> gap_indexes: {gap_indexes} count = {len(gap_indexes) if gap_indexes else (None)}")
 
         complete_range = range(N)
         # is_inner shouldn't be true here, anyway
@@ -151,9 +162,10 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
         #     complete_range = complete_range[1:-1]
         #     debug(f"AFTER {complete_range}")
 
-        numbers = [i for i in complete_range if not i in gap_indexes]
-
-        return numbers
+        index_range_with_gaps_removed = [i for i in complete_range if not i in gap_indexes]
+        debug(f">>>>>>>>> from range {range} and gap_indexes I've derived index_range_with_gaps_removed = {index_range_with_gaps_removed}")
+        result_array += index_range_with_gaps_removed
+        return
 
     debug(f">>>>>>>>> NO optimising")
 
@@ -185,7 +197,7 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
     debug(f"     ... final array: {result_array}")
 
 # def run(N, M, closed_start = True, closed_end = True, allow_optimisation = True):
-def run(N, M, closed_start = True, closed_end = True, allow_optimisation = False): # disabling optimisation completely for now! we assert on it being False elsewhere too
+def run(N, M, closed_start = True, closed_end = True, allow_optimisation = True): # disabling optimisation completely for now! we assert on it being False elsewhere too
     debug("------------------------------------")
     debug("------------------------------------")
     debug("\n")
@@ -313,9 +325,13 @@ def exhaustive_test_both_open_down_to_d_equals_2(max_n = 10):
 # # 9  4   .*.*.*.*.
 # # 9  5   .*.*.*.*.
 
-# exhaustive_test_both_open(max_n = 20)
+exhaustive_test_both_open(max_n = 20)
 
-exhaustive_test_both_open_down_to_d_equals_2()
+# exhaustive_test_both_open_down_to_d_equals_2()
+
+# print(run(10, 5, closed_start = False, closed_end = False))
+# print(run(4, 3, closed_start = False, closed_end = False))
+# print(run(4, 4, closed_start = False, closed_end = False))
 
 # print(run(5, 2, closed_start = False, closed_end = False))
 # print(run(5, 3, closed_start = False, closed_end = False))
