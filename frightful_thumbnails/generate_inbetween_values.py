@@ -24,6 +24,8 @@
 # as hints, not prescriptions! but then you have the problem of "do the flags overide
 # the value of M, or does M override the flags", and it's ambiguous and annoying.
 
+# 9  6   *.***.**.
+# 12  9   *.****.****.
 
 debug_enabled = False
 
@@ -75,9 +77,7 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
 
     original_n = N
 
-    if closed_start:
-        # if closed_start is true, we're not in a inner call, so we know the start index is 0
-        result_array.append(0) 
+
     # values = [0] if closed_start else []
 
 
@@ -87,6 +87,7 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
         use_start_index = 1 if closed_start else 0
 
         if closed_start:
+            result_array.append(0)             
             N -= 1
             M -= 1
 
@@ -110,15 +111,15 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
     debug(f"N: {N} M: {M}")
 
     # avoid division by zero in degenerate case M = 1
-    if M == 1:
-        debug(f"Got M = 1, so appending N // 2 = [{N // 2}]")
-        result_array.append(start_index + N // 2)
-        return
+    # if M == 1:
+    #     debug(f"Got M = 1, so appending N // 2 = [{N // 2}]")
+    #     result_array.append(start_index + N // 2)
+    #     return
 
     # with open start and end, we want to use M + 1?!
     # so add one to M - 1 for each of start, end that is open.
     D = N // M
-    debug(f"D: {D} (from use_n, use_m = {N} {M})")
+    debug(f"D: {D} (from N, M = {N} {M})")
     
     # Calculate the remainder to adjust spacing
     R = N % M
@@ -155,9 +156,6 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
         return numbers
 
     debug(f">>>>>>>>> NO optimising")
-
-    spaces = N - M
-    debug(f"spaces: {spaces}")
 
     start_indexo = -D//2
 
