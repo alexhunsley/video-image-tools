@@ -76,9 +76,11 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
     if N == 0 or M == 0:
         return
 
+    target_range = range(start_index, start_index + N)
+
     # short-circuit: choose all indexes
     if N == M:
-        result_array += range(N)
+        result_array += target_range
         return
 
     original_n = N
@@ -90,7 +92,7 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
 
     # the inner call to this func has false for both these vars so we won't end up in here on inner call
     if closed_start or closed_end:
-        use_start_index = 1 if closed_start else 0
+        use_start_index = start_index + 1 if closed_start else start_index
 
         if closed_start:
             result_array.append(0)             
@@ -149,11 +151,10 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
         # TODO get rid of is_inner and just have an inner func we call here and also further down (for no optimisation)
 
         gap_indexes = []
-        select_values(gap_indexes, N, N - M, closed_start = False, closed_end = False, allow_optimisation = allow_optimisation, is_inner = True)
+        select_values(gap_indexes, N, N - M, start_index = start_index, closed_start = False, closed_end = False, allow_optimisation = allow_optimisation, is_inner = True)
         
         debug(f">>>>>>>>> gap_indexes: {gap_indexes} count = {len(gap_indexes) if gap_indexes else (None)}")
 
-        complete_range = range(N)
         # is_inner shouldn't be true here, anyway
         # if not closed and not is_inner:
         # if closed:
@@ -162,7 +163,7 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
         #     complete_range = complete_range[1:-1]
         #     debug(f"AFTER {complete_range}")
 
-        index_range_with_gaps_removed = [i for i in complete_range if not i in gap_indexes]
+        index_range_with_gaps_removed = [i for i in target_range if not i in gap_indexes]
         debug(f">>>>>>>>> from range {range} and gap_indexes I've derived index_range_with_gaps_removed = {index_range_with_gaps_removed}")
         result_array += index_range_with_gaps_removed
         return
@@ -178,7 +179,9 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
     # -2 below breaks symmetry slightly towards left, -1 the right
     # start_indexo = -(diff // 2)-2
     # start_indexo = -(diff // 2) -2
-    start_indexo = -((diff - 1) // 2) - 2
+
+    # works for open, fails on closed
+    start_indexo = start_index -((diff - 1) // 2) - 2
 
     debug(f" <>><>><><<> ({N} {M}) start_indexo = {start_indexo}  (left gap={gap_at_left}, right_gap={gap_at_right} diff = {diff}")
 
@@ -194,7 +197,7 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
 
     # for idx in range(0, M - start_indexo):
     # for idx in range(start_indexo, M):
-    for idx in range(0, M):
+    for idx in range(M):
         debug(f"incr: {current_value} + {D} => {current_value + D}")
         current_value += D
         
@@ -204,26 +207,26 @@ def select_values(result_array, N, M, start_index = 0, closed_start = True, clos
         #     current_value += 1
 
         debug(f" ------------------------> start_index = {start_index}")
-        result_array.append(current_value + start_index)
-        # result_array.append(current_value)
+        result_array.append(current_value)
     
     debug(f"     ... final array: {result_array}")
 
 # def run(N, M, closed_start = True, closed_end = True, allow_optimisation = True):
-def run(N, M, closed_start = True, closed_end = True, allow_optimisation = True): # disabling optimisation completely for now! we assert on it being False elsewhere too
+def run(N, M, start_index = 0, closed_start = True, closed_end = True, allow_optimisation = True): # disabling optimisation completely for now! we assert on it being False elsewhere too
     debug("------------------------------------")
     debug("------------------------------------")
     debug("\n")
 
     result = []
-    select_values(result, N, M, closed_start = closed_start, closed_end = closed_end, allow_optimisation = allow_optimisation)
+    select_values(result, N, M, start_index = start_index, closed_start = closed_start, closed_end = closed_end, allow_optimisation = allow_optimisation)
 
     debug(f"-->> for N: {N}, M: {M}, closed_st: {closed_start}, closed_end = {closed_end}, allow_optimisation = {allow_optimisation}: {result}  ", end='')
 
     debug()
 
     result_str = ""
-    for i in range(N):
+    # TODO factor out this range, used multiple places
+    for i in range(start_index, start_index + N):
         debug(f"Checking i = {i}  ... ", end='')
         if i in result:
             debug("Found i in results, adding *")
@@ -330,7 +333,6 @@ def exhaustive_test_both_open_down_to_d_equals_2(max_n = 10):
             debug(result_str.count("*"))
         print()
 
-# exhaustive_test_both_closed(max_n = 20)
 
 # print()
 
@@ -338,6 +340,7 @@ def exhaustive_test_both_open_down_to_d_equals_2(max_n = 10):
 # # 9  4   .*.*.*.*.
 # # 9  5   .*.*.*.*.
 
+exhaustive_test_both_closed(max_n = 20)
 exhaustive_test_both_open(max_n = 20)
 
 # exhaustive_test_both_open_down_to_d_equals_2()
@@ -357,7 +360,9 @@ exhaustive_test_both_open(max_n = 20)
 
 # this produces **..* which isn't very pleasing! Would rather get "*.*.*".
 
-# run(5, 3)
+# run(5, 4)
+# run(7, 5, start_index = 0, closed_start = False, closed_end = False)
+
 # run(3, 1, closed_start = False, closed_end = False)
 
 
