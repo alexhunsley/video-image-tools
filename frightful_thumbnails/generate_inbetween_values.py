@@ -168,6 +168,13 @@ def count_ones_at_end(lst):
     return count
 
 
+# Another possible optim:
+# *.*       ->  *..*
+# *.*.*.*.  ->  *.*..*.*
+#
+# i.e reverse second half when we have R = 0.
+# A bit ott, don't bother at the moment.
+
 def optimised_naive_partition_for_n_split_into_m(naive_partition):
     """
     Returns optimised partition of the given naive_partition.
@@ -181,6 +188,10 @@ def optimised_naive_partition_for_n_split_into_m(naive_partition):
     [1, 1]
     >>> optimised_naive_partition_for_n_split_into_m([1, 1, 1, 1, 1])
     [1, 1, 1, 1, 1]
+    >>> optimised_naive_partition_for_n_split_into_m([10, 1])
+    [11]
+    >>> optimised_naive_partition_for_n_split_into_m([3, 1])
+    [4]
     >>> optimised_naive_partition_for_n_split_into_m([4, 4, 4])
     [4, 4, 4]
     >>> optimised_naive_partition_for_n_split_into_m([4, 4, 4, 1])
@@ -233,6 +244,34 @@ def optimised_naive_partition_for_n_split_into_m(naive_partition):
         loop_index += 1
 
     return balanced_partition
+
+
+def optimised_naive_pattern_for_n_split_into_m(naive_partition):
+    optimised_partition = optimised_naive_partition_for_n_split_into_m(naive_partition)
+    return f"{naive_partition} {render_partition(optimised_partition)}"
+
+# TOMORROW: add the centering thing. Basically do start_point = (N - partition[0]/2).
+# Do this to the partition array? But that can't store notion of dots at end with no * following.
+
+# TODO later call the N M -> partition function so we pass in N M below.
+print(optimised_naive_pattern_for_n_split_into_m([]))
+print(optimised_naive_pattern_for_n_split_into_m([1]))
+print(optimised_naive_pattern_for_n_split_into_m([1, 1]))
+print(optimised_naive_pattern_for_n_split_into_m([2]))
+print(optimised_naive_pattern_for_n_split_into_m([3]))
+print(optimised_naive_pattern_for_n_split_into_m([4]))
+print(optimised_naive_pattern_for_n_split_into_m([2, 2]))
+print(optimised_naive_pattern_for_n_split_into_m([2, 2, 2]))
+print(optimised_naive_pattern_for_n_split_into_m([3, 3, 3]))
+
+print()
+
+print(optimised_naive_pattern_for_n_split_into_m([3, 3, 3, 3, 3, 1, 1]))
+print(optimised_naive_pattern_for_n_split_into_m([3, 3, 3, 3, 3, 1, 1, 1]))
+print(optimised_naive_pattern_for_n_split_into_m([3, 3, 3, 3, 3, 1, 1, 1, 1]))
+print(optimised_naive_pattern_for_n_split_into_m([3, 3, 3]))
+
+sys.exit(0)
 
 
 # N is number of value total, M is number we want to pick (evenly spaced in N)
