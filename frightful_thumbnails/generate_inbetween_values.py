@@ -27,11 +27,213 @@
 # 9  6   *.***.**.
 # 12  9   *.****.****.
 
+#
+# ok, so 1/3 of the space (N) can be 'missed' (1/6 either side) for unforunate vaues of M ~>= 1/3N up to around (or 2/3N,
+# but the 'christmas tree' effect starts much sooner (like M>=30 for N = 500).
+#
+# One way to deal with this might be to say divide M by 2, then make each 'chunk' be some pattern of appropriate length with two hits in it,
+# which won't be divisible by 2, but we just have to fill ensure 2 things roughly fill it. We could use same alg to generate that smaller pattern
+# too... recursively until death us do part...?
+# Or divide by 4. And so on.
+# 
+
+import sys
+
 debug_enabled = False
 
 def debug(msg = "", end = '\n'):
     if debug_enabled:
         print(msg, end=end)
+
+
+# turn a partition into ascii. 
+# Example:
+#
+#  [1, 3, 2] --> "*..*.*"
+def render_partition(p):
+    """
+    Returns ascii rendering of the given partition using '* and '.' chars.
+    >>> render_partition([])
+    ''
+    >>> render_partition([1])
+    '*'
+    >>> render_partition([2])
+    '.*'
+    >>> render_partition([3])
+    '..*'
+    >>> render_partition([1, 1])
+    '**'
+    >>> render_partition([1, 1, 1])
+    '***'
+    >>> render_partition([1, 5, 1])
+    '*....**'
+    >>> render_partition([1, 2, 3])
+    '*.*..*'
+    >>> render_partition([0]) # numbers <1 are ignored
+    ''
+    >>> render_partition([0, -9, -1, -0]) # numbers <1 are ignored
+    ''
+    >>> render_partition([1, 0, -10, 2]) # numbers <1 are ignored
+    '*.*'
+    """
+    ascii_result = ""
+
+    for p_entry in p:
+        if p_entry > 0:
+            ascii_result += "." * (p_entry - 1) + "*"
+
+    return ascii_result
+
+
+p = [1, 2, 3]
+
+print(render_partition(p))
+
+# the raw partition scheme before optimising to scatter remainder 1s (from end)
+# between the non-1 entries at front
+def naive_partitions_for_n_split_into_m(N, M):
+    """
+    Returns array of partitions (ints) for splitting N into M.
+
+    >>> naive_partitions_for_n_split_into_m(0, 0)
+    []
+    >>> naive_partitions_for_n_split_into_m(0, 1)
+    []
+    >>> naive_partitions_for_n_split_into_m(0, 123456)
+    []
+    >>> naive_partitions_for_n_split_into_m(1, 1)
+    [1]
+    >>> naive_partitions_for_n_split_into_m(2, 2)
+    [1, 1]
+    >>> naive_partitions_for_n_split_into_m(9, 9)
+    [1, 1, 1, 1, 1, 1, 1, 1, 1]
+    >>> naive_partitions_for_n_split_into_m(2, 1)
+    [1, 1]
+    >>> naive_partitions_for_n_split_into_m(3, 2)
+    [2, 1]
+    >>> naive_partitions_for_n_split_into_m(4, 3)
+    [3, 1]
+    >>> naive_partitions_for_n_split_into_m(5, 3)
+    [3, 1, 1]
+    >>> naive_partitions_for_n_split_into_m(6, 3)
+    [3, 3]
+    >>> naive_partitions_for_n_split_into_m(9, 3)
+    [3, 3, 3]
+    >>> naive_partitions_for_n_split_into_m(10, 6)
+    [6, 1, 1, 1, 1]
+    >>> naive_partitions_for_n_split_into_m(10, 9)
+    [9, 1]
+    >>> naive_partitions_for_n_split_into_m(13, 6)
+    [6, 6, 1]
+    """
+
+    # short-circuit: N or M being zero gives empty partition
+    if N == 0 or M == 0:
+        return []
+
+    # short-circuit: choose all indexes gives all 1s
+    if N == M:
+        return [1] * N
+
+    # D = max size of M repeatable patterns in N
+    D = (N // M)
+    partitions = [M] * D 
+
+    # remainder
+    R = N - M * D
+    partitions += [1] * R
+
+    return partitions 
+
+
+def count_ones_at_end(lst):
+    """
+    >>> count_ones_at_end([])
+    0
+    >>> count_ones_at_end([1])
+    1
+    >>> count_ones_at_end([1, 3])
+    0
+    >>> count_ones_at_end([3, 3, 2, 1, 1, 1])
+    3
+    >>> count_ones_at_end([3, 3, 2])
+    0
+    """
+    count = 0
+    for element in reversed(lst):
+        if element == 1:
+            count += 1
+        else:
+            break
+    return count
+
+
+def optimised_naive_partition_for_n_split_into_m(naive_partition):
+    """
+    Returns optimised partition of the given naive_partition.
+    This means we attempt to make the partition as symmetrical as possible.
+    
+    >>> optimised_naive_partition_for_n_split_into_m([])
+    []
+    >>> optimised_naive_partition_for_n_split_into_m([1])
+    [1]
+    >>> optimised_naive_partition_for_n_split_into_m([1, 1])
+    [1, 1]
+    >>> optimised_naive_partition_for_n_split_into_m([1, 1, 1, 1, 1])
+    [1, 1, 1, 1, 1]
+    >>> optimised_naive_partition_for_n_split_into_m([4, 4, 4])
+    [4, 4, 4]
+    >>> optimised_naive_partition_for_n_split_into_m([4, 4, 4, 1])
+    [5, 4, 4]
+    >>> optimised_naive_partition_for_n_split_into_m([4, 4, 4, 1, 1])
+    [5, 4, 5]
+    >>> optimised_naive_partition_for_n_split_into_m([2, 2, 2, 2, 2, 1, 1, 1])
+    [3, 2, 3, 2, 3]
+    """
+
+    if not naive_partition:
+        return []
+
+    if naive_partition[0] == 1:
+        # nothing to do, iff N == M we end up with an array of all ones.
+        return naive_partition
+
+    number_ones_at_end = count_ones_at_end(naive_partition)
+
+    if number_ones_at_end == 0:
+        return naive_partition
+
+    # remove ones from end
+    balanced_partition = naive_partition[:-number_ones_at_end]
+
+    # distribute 1s between the non-ones remaining
+    M = len(balanced_partition)
+
+    # skip factor
+    #
+    #  Optimisation for improving symmetry.
+    #  It selects the end values to achieve that.
+    # 
+    if number_ones_at_end > 1 and (M - 1) % (number_ones_at_end - 1) == 0:
+        # symmetry improvement
+        S = (M - 1) // (number_ones_at_end - 1)
+        # print(f"1: made S = {S}")
+    else:
+        S = M // number_ones_at_end
+        # print(f"1: made S = {S}")
+
+
+    loop_index = 0
+    partition_index = 0
+
+    while loop_index < number_ones_at_end:
+        balanced_partition[partition_index] += 1
+        partition_index += S
+
+        loop_index += 1
+
+    return balanced_partition
+
 
 # N is number of value total, M is number we want to pick (evenly spaced in N)
 def select_values(result_array, N, M, start_index = 0, closed_start = True, closed_end = True, allow_optimisation = True, is_inner = False):
@@ -271,7 +473,7 @@ def exhaustive_test_both_closed(max_n = 10):
 
 
 def exhaustive_test_both_open(max_n = 10):
-    for n in range(0, max_n + 1):
+    for n in range(max_n, max_n + 1):
         # choosing 2 and up, since we've got closed at both ends currently
         for m in range(0, n + 1):
             # print(f"N: {n} M: {m}")
@@ -298,8 +500,11 @@ def exhaustive_test_both_open_down_to_d_equals_2(max_n = 10):
 # # 9  4   .*.*.*.*.
 # # 9  5   .*.*.*.*.
 
-exhaustive_test_both_closed(max_n = 20)
-exhaustive_test_both_open(max_n = 20)
+# exhaustive_test_both_closed(max_n = 20)
+# exhaustive_test_both_open(max_n = 200)
+# pathological example:
+# .................................*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*..................................
+print(run(200, 67, closed_start = False, closed_end = False))
 
 # exhaustive_test_both_open_down_to_d_equals_2()
 
@@ -361,12 +566,6 @@ exhaustive_test_both_open(max_n = 20)
 # run(99, 96)
 
 # print(select_values(10, 4))  # Example with N = 10, M = 4
-
-
-# if __name__ == "__main__":
-#     import doctest
-#     debug_enabled = False
-#     doctest.testmod()
 
 
 
@@ -448,4 +647,12 @@ exhaustive_test_both_open(max_n = 20)
 # 9  7   **.***.**
 # 9  8   ****.****
 # 9  9   *********
+
+
+
+if __name__ == "__main__":
+    import doctest
+    debug_enabled = False
+    doctest.testmod()
+
 
