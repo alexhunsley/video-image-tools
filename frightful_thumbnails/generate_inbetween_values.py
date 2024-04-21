@@ -82,13 +82,24 @@ def render_partition(p):
         if p_entry > 0:
             ascii_result += "." * (p_entry - 1) + "*"
 
+    # do centering. We can't do this on partiiton directly as we can't handle dots that don't end in '*'.
+
+    first_selected_index = ascii_result.find('*')
+
+    if first_selected_index > 1:
+        rotate_by = first_selected_index // 2
+
+        left = ascii_result[rotate_by:]
+        right = ascii_result[0:rotate_by]
+
+        print(f"patt: {ascii_result} rotate by = {rotate_by} left = {left} right = {right}")
+
+        ascii_result = left + right
+
     return ascii_result
 
 
-p = [1, 2, 3]
-
-print(render_partition(p))
-
+# 
 # the raw partition scheme before optimising to scatter remainder 1s (from end)
 # between the non-1 entries at front
 def naive_partitions_for_n_split_into_m(N, M):
@@ -200,8 +211,15 @@ def optimised_naive_partition_for_n_split_into_m(naive_partition):
     [5, 4, 5]
     >>> optimised_naive_partition_for_n_split_into_m([2, 2, 2, 2, 2, 1, 1, 1])
     [3, 2, 3, 2, 3]
+    >>> optimised_naive_partition_for_n_split_into_m([1, 1]) # from N=3, M=2
+    [2, 1]
     """
 
+    # this needs fixing.
+    # consider N = 6, M = 4: we will get [1, 1, 1, 1,   1, 1] (1 divides in, 4 times, then the 4 remainder).
+    # this needs to become something like [2, 1, 2, 1], so we need the information about the remainder to
+    # know what amount of 1s to absorb in previous indexes.
+    # from this we need to make 
     if not naive_partition:
         return []
 
@@ -246,30 +264,52 @@ def optimised_naive_partition_for_n_split_into_m(naive_partition):
     return balanced_partition
 
 
+def optimised_naive_pattern_for_n_split_into_m__B(N, M):
+    naive_partition = naive_partitions_for_n_split_into_m(N, M)
+    return optimised_naive_pattern_for_n_split_into_m(naive_partition)
+
+
 def optimised_naive_pattern_for_n_split_into_m(naive_partition):
     optimised_partition = optimised_naive_partition_for_n_split_into_m(naive_partition)
     return f"{naive_partition} {render_partition(optimised_partition)}"
 
 # TOMORROW: add the centering thing. Basically do start_point = (N - partition[0]/2).
-# Do this to the partition array? But that can't store notion of dots at end with no * following.
+# Do this to the partition array? But that can't store notion of dots at end with no * following....
 
 # TODO later call the N M -> partition function so we pass in N M below.
-print(optimised_naive_pattern_for_n_split_into_m([]))
-print(optimised_naive_pattern_for_n_split_into_m([1]))
-print(optimised_naive_pattern_for_n_split_into_m([1, 1]))
-print(optimised_naive_pattern_for_n_split_into_m([2]))
-print(optimised_naive_pattern_for_n_split_into_m([3]))
-print(optimised_naive_pattern_for_n_split_into_m([4]))
-print(optimised_naive_pattern_for_n_split_into_m([2, 2]))
-print(optimised_naive_pattern_for_n_split_into_m([2, 2, 2]))
-print(optimised_naive_pattern_for_n_split_into_m([3, 3, 3]))
+# print(optimised_naive_pattern_for_n_split_into_m([]))
+# print(optimised_naive_pattern_for_n_split_into_m([1]))
+# print(optimised_naive_pattern_for_n_split_into_m([1, 1]))
+# print(optimised_naive_pattern_for_n_split_into_m([2]))
+# print(optimised_naive_pattern_for_n_split_into_m([3]))
+# print(optimised_naive_pattern_for_n_split_into_m([4]))
+# print(optimised_naive_pattern_for_n_split_into_m([2, 2]))
+# print(optimised_naive_pattern_for_n_split_into_m([2, 2, 2]))
+# print(optimised_naive_pattern_for_n_split_into_m([3, 3, 3]))
 
-print()
+# print()
 
-print(optimised_naive_pattern_for_n_split_into_m([3, 3, 3, 3, 3, 1, 1]))
-print(optimised_naive_pattern_for_n_split_into_m([3, 3, 3, 3, 3, 1, 1, 1]))
-print(optimised_naive_pattern_for_n_split_into_m([3, 3, 3, 3, 3, 1, 1, 1, 1]))
-print(optimised_naive_pattern_for_n_split_into_m([3, 3, 3]))
+# print(optimised_naive_pattern_for_n_split_into_m([3, 3, 3, 3, 3, 1, 1]))
+# print(optimised_naive_pattern_for_n_split_into_m([3, 3, 3, 3, 3, 1, 1, 1]))
+# print(optimised_naive_pattern_for_n_split_into_m([3, 3, 3, 3, 3, 1, 1, 1, 1]))
+# print(optimised_naive_pattern_for_n_split_into_m([3, 3, 3]))
+
+# print("Result: ", optimised_naive_pattern_for_n_split_into_m__B(5, 3))
+
+
+# p = [1, 2, 3]
+# print(render_partition(p))
+
+# print(optimised_naive_pattern_for_n_split_into_m__B(5, 2))
+# print(optimised_naive_pattern_for_n_split_into_m__B(5, 3))
+
+
+# print(optimised_naive_pattern_for_n_split_into_m__B(20, 11))
+
+print(optimised_naive_pattern_for_n_split_into_m__B(3, 2))
+
+
+# print(optimised_naive_pattern_for_n_split_into_m__B(200, 67))
 
 sys.exit(0)
 
